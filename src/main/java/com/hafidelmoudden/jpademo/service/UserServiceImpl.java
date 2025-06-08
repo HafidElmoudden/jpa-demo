@@ -36,15 +36,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public Role findRoleByRoleName(String roleName) {
         return roleRepository.findByRoleName(roleName);
-    }
-
-    @Override
+    }    @Override
     public void addRoleToUser(String userName, String roleName) {
         User user = findUserByUserName(userName);
         Role role = findRoleByRoleName(roleName);
-        if (user.getRoles() != null) {
-            user.getRoles().add(role);
-            role.getUsers().add(user);
+        if (user != null && role != null) {
+            if (user.getRoles() != null) {
+                user.getRoles().add(role);
+                role.getUsers().add(user);
+            }
+        } else {
+            if (user == null) {
+                System.err.println("User not found: " + userName);
+            }
+            if (role == null) {
+                System.err.println("Role not found: " + roleName);
+            }
         }
     }
 

@@ -24,30 +24,30 @@ public class JpaDemoApplication {
             firstUser.setUsername("hafid");
             firstUser.setPassword("hafid321");
             userService.addNewUser(firstUser);
-            
+
             User adminUser = new User();
             adminUser.setUsername("admin");
             adminUser.setPassword("1234");
             userService.addNewUser(adminUser);
-            
-            String[] roleNames = {"STUDENT", "USER", "ADMIN"};
+
+            String[] roleNames = { "STUDENT", "USER", "ADMIN" };
             for (String name : roleNames) {
                 Role role = new Role();
                 role.setRoleName(name);
                 userService.addNewRole(role);
             }
-            
-            userService.addRoleToUser("user1", "STUDENT");
-            userService.addRoleToUser("user1", "USER");
+
+            userService.addRoleToUser("hafid", "STUDENT");
+            userService.addRoleToUser("hafid", "USER");
             userService.addRoleToUser("admin", "ADMIN");
             userService.addRoleToUser("admin", "USER");
-            
+
             try {
-                User authenticatedUser = userService.authenticate("user1", "1234");
+                User authenticatedUser = userService.authenticate("hafid", "hafid321");
                 System.out.println("User ID: " + authenticatedUser.getUserId());
                 System.out.println("Password: " + authenticatedUser.getPassword());
                 System.out.println("User roles:");
-                
+
                 authenticatedUser.getRoles().forEach(role -> {
                     System.out.println("- " + role);
                 });
