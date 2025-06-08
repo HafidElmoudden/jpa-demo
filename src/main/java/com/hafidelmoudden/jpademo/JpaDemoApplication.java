@@ -20,10 +20,40 @@ public class JpaDemoApplication {
     @Bean
     CommandLineRunner start(UserService userService) {
         return args -> {
-            User user1=new User();
-            user1.setUsername("hafid");
-            user1.setPassword("hafid321");
-            userService.addNewUser(user1);
+            User firstUser = new User();
+            firstUser.setUsername("hafid");
+            firstUser.setPassword("hafid321");
+            userService.addNewUser(firstUser);
+            
+            User adminUser = new User();
+            adminUser.setUsername("admin");
+            adminUser.setPassword("1234");
+            userService.addNewUser(adminUser);
+            
+            String[] roleNames = {"STUDENT", "USER", "ADMIN"};
+            for (String name : roleNames) {
+                Role role = new Role();
+                role.setRoleName(name);
+                userService.addNewRole(role);
+            }
+            
+            userService.addRoleToUser("user1", "STUDENT");
+            userService.addRoleToUser("user1", "USER");
+            userService.addRoleToUser("admin", "ADMIN");
+            userService.addRoleToUser("admin", "USER");
+            
+            try {
+                User authenticatedUser = userService.authenticate("user1", "1234");
+                System.out.println("User ID: " + authenticatedUser.getUserId());
+                System.out.println("Password: " + authenticatedUser.getPassword());
+                System.out.println("User roles:");
+                
+                authenticatedUser.getRoles().forEach(role -> {
+                    System.out.println("- " + role);
+                });
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         };
 
     }

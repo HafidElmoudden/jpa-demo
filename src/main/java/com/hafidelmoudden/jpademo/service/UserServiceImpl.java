@@ -40,11 +40,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addRoleToUser(String userName, String roleName) {
-        User user=findUserByUserName(userName);
-        Role role=findRoleByRoleName(roleName);
-        if(user.getRoles()!=null){
+        User user = findUserByUserName(userName);
+        Role role = findRoleByRoleName(roleName);
+        if (user.getRoles() != null) {
             user.getRoles().add(role);
             role.getUsers().add(user);
         }
+    }
+
+    @Override
+    public User authenticate(String userName, String password) {
+        User user = findUserByUserName(userName);
+        if (user == null)
+            throw new RuntimeException("Bad credentials");
+        if (user.getPassword().equals(password)) {
+            return user;
+        }
+        throw new RuntimeException("Bad credentials");
     }
 }
